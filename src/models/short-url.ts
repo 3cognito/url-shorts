@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { customAlphabet } from "nanoid";
 
-const nanoid = customAlphabet(process.env.CUSTOM_CHARS, 10);
+const nanoid = customAlphabet(String(process.env.CUSTOM_CHARS), 10);
 
 const shortSchema = new mongoose.Schema({
   shortUrl: {
