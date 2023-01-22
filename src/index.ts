@@ -16,4 +16,5 @@ const server = app.listen(port, () => {
   //connect to db
   db();
   //initialize routes
+  routes(app);
 });
