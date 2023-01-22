@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
 import { customAlphabet } from "nanoid";
 
+const nanoid = customAlphabet(process.env.CUSTOM_CHARS, 10);
+
 const shortSchema = new mongoose.Schema({
   shortUrl: {
     type: String,
     unique: true,
     required: [true, "short url needs to be saved"],
+    default: nanoid(),
   },
   destination: {
     type: String,
