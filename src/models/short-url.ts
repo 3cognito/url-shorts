@@ -1,4 +1,5 @@
-import mongoose, { Schema, model, connect } from "mongoose";
+import mongoose from "mongoose";
+import validator from "validator";
 import { customAlphabet } from "nanoid";
 
 const nanoid = customAlphabet(
@@ -19,6 +20,7 @@ const shortSchema = new mongoose.Schema<IURL>({
   destination: {
     type: String,
     required: [true, "Destination url needs to be passed"],
+    validate: validator.isURL,
   },
 });
 
