@@ -1,7 +1,10 @@
 import mongoose, { Schema, model, connect } from "mongoose";
 import { customAlphabet } from "nanoid";
 
-const nanoid = customAlphabet(String(process.env.CUSTOM_CHARS), 10);
+const nanoid = customAlphabet(
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  10
+);
 
 interface IURL {
   shortUrl: string;
@@ -12,13 +15,17 @@ const shortSchema = new mongoose.Schema<IURL>({
   shortUrl: {
     type: String,
     unique: true,
-    required: [true, "short url needs to be saved"],
-    default: nanoid(),
   },
   destination: {
     type: String,
     required: [true, "Destination url needs to be passed"],
   },
+});
+
+shortSchema.pre("save", function (next) {
+  let short = nanoid();
+  this.set("shortUrl", short);
+  next();
 });
 
 const shortUrl = mongoose.model<IURL>("shortURL", shortSchema);
