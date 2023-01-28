@@ -5,7 +5,7 @@ import { customAlphabet } from "nanoid";
 
 const nanoid = customAlphabet(
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-  10
+  7
 );
 
 const shorten = async (req: Request, res: Response) => {
@@ -17,9 +17,7 @@ const shorten = async (req: Request, res: Response) => {
     let shortId = nanoid();
     //Ensure there is no conflict with db that stores customised urls
     const otherDbCheck = await customUrl.findOne({ customUrl: shortId });
-    if (otherDbCheck) {
-      shortId = nanoid();
-    }
+    if (otherDbCheck) shortId = nanoid();
     short.shortUrl = shortId;
     await short.save();
     res.status(200).send({ link: short.shortUrl });
@@ -31,7 +29,6 @@ const shorten = async (req: Request, res: Response) => {
 
 const direct = async (req: Request, res: Response) => {
   try {
-    //Potential problem will occur when there are two matches - potential solution would be to create individual routes.
     const shortId = req.params.id;
     const origin1 = await shortUrl.findOne({ shortId });
     const origin2 = await customUrl.findOne({ shortId });
@@ -49,8 +46,10 @@ const direct = async (req: Request, res: Response) => {
 const customize = async (req: Request, res: Response) => {
   try {
     const { destination, customUrl } = req.body;
-    const urlExists = await customUrl.findOne({ customUrl });
-    if (urlExists)
+    //Next two lines ensure no db conflicts
+    const urlExists1 = await customUrl.findOne({ customUrl });
+    const urlExists2 = await shortUrl.findOne({ customUrl });
+    if (urlExists1 || urlExists2)
       return res.status(404).send({ message: "url is taken, enter another" });
     const custom = new customUrl({ destination, customUrl });
     await custom.save();
