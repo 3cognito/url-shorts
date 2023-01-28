@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import shortUrl from "../models/short-url";
+import shortUrl from "../models/random-url";
 
 const shorten = async (req: Request, res: Response) => {
   try {
@@ -28,4 +28,9 @@ const direct = async (req: Request, res: Response) => {
 };
 
 //Controller for a customizable short
+const customize = async (req: Request, res: Response) => {
+  const { destination, customizedUrl } = req.body;
+  const urlExists = await shortUrl.findOne({ shortUrl: customizedUrl });
+  if (urlExists) return res.status(404).send({ message: "url is taken" });
+};
 export { shorten, direct };
