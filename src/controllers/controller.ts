@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
 import shortUrl from "../models/random-url";
 import customUrl from "../models/customized-url";
+import { customAlphabet } from "nanoid";
+
+const nanoid = customAlphabet(
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  10
+);
 
 const shorten = async (req: Request, res: Response) => {
   try {
@@ -8,6 +14,13 @@ const shorten = async (req: Request, res: Response) => {
     const urlExists = await shortUrl.findOne({ destination });
     if (urlExists) return res.status(200).send({ link: urlExists.shortUrl });
     const short = new shortUrl({ destination });
+    let shortId = nanoid();
+    //Ensure there is no conflict with db that stores customised urls
+    const otherDbCheck = await customUrl.findOne({ customUrl: shortId });
+    if (otherDbCheck) {
+      shortId = nanoid();
+    }
+    short.shortUrl = shortId;
     await short.save();
     res.status(200).send({ link: short.shortUrl });
   } catch (err) {

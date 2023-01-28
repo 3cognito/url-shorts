@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
 import validator from "validator";
-import { customAlphabet } from "nanoid";
-
-const nanoid = customAlphabet(
-  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-  10
-);
 
 interface IURL {
   shortUrl: string;
@@ -24,11 +18,11 @@ const shortSchema = new mongoose.Schema<IURL>({
   },
 });
 
-shortSchema.pre("save", function (next) {
-  let short = nanoid();
-  this.set("shortUrl", short);
-  next();
-});
+// shortSchema.pre("save", function (next) {
+//   let short = nanoid();
+//   this.set("shortUrl", short);
+//   next();
+// });
 
 const shortUrl = mongoose.model<IURL>("shortURL", shortSchema);
 
