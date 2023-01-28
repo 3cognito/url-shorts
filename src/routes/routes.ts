@@ -1,5 +1,5 @@
 import { Express } from "express-serve-static-core";
-import { direct, shorten } from "./controller";
+import { direct, shorten } from "../controllers/controller";
 import { Request, Response } from "express";
 
 const routes = (app: Express) => {

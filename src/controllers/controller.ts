@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import shortUrl from "./models/short-url";
+import shortUrl from "../models/short-url";
 
 const shorten = async (req: Request, res: Response) => {
   try {
