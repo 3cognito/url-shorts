@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-interface IURL {
-  customUrl: string;
+interface cURL {
+  customLink: string;
   destination: string;
 }
 
-const customSchema = new mongoose.Schema<IURL>({
-  customUrl: {
+const customSchema = new mongoose.Schema<cURL>({
+  customLink: {
     type: String,
     unique: true,
     required: true,
@@ -21,6 +21,6 @@ const customSchema = new mongoose.Schema<IURL>({
   },
 });
 
-const customUrl = mongoose.model<IURL>("customUrl", customSchema);
+const customUrl = mongoose.model<cURL>("customUrl", customSchema);
 
 export default customUrl;

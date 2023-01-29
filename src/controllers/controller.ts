@@ -30,12 +30,12 @@ const shorten = async (req: Request, res: Response) => {
 const direct = async (req: Request, res: Response) => {
   try {
     const shortId = req.params.id;
-    const origin1 = await shortUrl.findOne({ shortId });
-    const origin2 = await customUrl.findOne({ shortId });
+    const origin1 = await shortUrl.findOne({ shortUrl: shortId });
+    const origin2 = await customUrl.findOne({ customLink: shortId });
     if (!origin1 && !origin2)
       return res.status(404).send({ message: "Page not found" });
-    if (origin1) return res.redirect(`https://${origin1.destination}`);
-    if (origin2) return res.redirect(`https://${origin2.destination}`);
+    if (origin1) return res.redirect(origin1.destination);
+    if (origin2) return res.redirect(origin2.destination);
   } catch (err) {
     console.log(err);
     res.status(400).send({ message: "something went wrong" });
@@ -45,15 +45,15 @@ const direct = async (req: Request, res: Response) => {
 //Controller for a customizable short
 const customize = async (req: Request, res: Response) => {
   try {
-    const { destination, customUrl } = req.body;
+    const { destination, custom } = req.body;
     //Next two lines ensure no db conflicts
-    const urlExists1 = await customUrl.findOne({ customUrl });
-    const urlExists2 = await shortUrl.findOne({ customUrl });
+    const urlExists1 = await customUrl.findOne({ customLink: custom });
+    const urlExists2 = await shortUrl.findOne({ shortUrl: custom });
     if (urlExists1 || urlExists2)
       return res.status(404).send({ message: "url is taken, enter another" });
-    const custom = new customUrl({ destination, customUrl });
-    await custom.save();
-    res.status(201).send({ link: custom.customUrl });
+    const customised = new customUrl({ destination, customLink: custom });
+    await customised.save();
+    res.status(200).send({ link: customised.customLink });
   } catch (err) {
     console.log(err);
     res.status(400).send({ message: "something went wrong" });
@@ -64,10 +64,10 @@ const editShort = async (req: Request, res: Response) => {
   try {
     //Check if the url is of the customizable type
     const { value, newValue } = req.body;
-    const editable = await customUrl.findOne({ customUrl: value });
+    const editable = await customUrl.findOne({ customLink: value });
     if (!editable)
       return res.status(400).send({ message: "cannot edit that url" });
-    const exists = await customUrl.findOne({ customUrl: newValue });
+    const exists = await customUrl.findOne({ customLink: newValue });
     if (exists) return res.status(400).send({ message: "url unavailable" });
 
     const newCustomUrl = await customUrl.findOneAndUpdate(
@@ -76,7 +76,7 @@ const editShort = async (req: Request, res: Response) => {
       { new: true }
     );
     if (newCustomUrl)
-      return res.status(200).send({ link: newCustomUrl?.customUrl });
+      return res.status(200).send({ link: newCustomUrl.customLink });
   } catch (err) {
     console.log(err);
     res.status(400).send({ message: "something went wrong" });
