@@ -16,7 +16,7 @@ const shorten = async (req: Request, res: Response) => {
     const short = new shortUrl({ destination });
     let shortId = nanoid();
     //Ensure there is no conflict with db that stores customised urls
-    const otherDbCheck = await customUrl.findOne({ customUrl: shortId });
+    const otherDbCheck = await customUrl.findOne({ customLink: shortId });
     if (otherDbCheck) shortId = nanoid();
     short.shortUrl = shortId;
     await short.save();
@@ -71,10 +71,11 @@ const editShort = async (req: Request, res: Response) => {
     if (exists) return res.status(400).send({ message: "url unavailable" });
 
     const newCustomUrl = await customUrl.findOneAndUpdate(
-      { customUrl: newValue },
-      { customUrl: newValue },
+      { customLink: value },
+      { customLink: newValue },
       { new: true }
     );
+
     if (newCustomUrl)
       return res.status(200).send({ link: newCustomUrl.customLink });
   } catch (err) {
