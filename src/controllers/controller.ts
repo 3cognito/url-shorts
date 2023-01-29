@@ -20,7 +20,7 @@ const shorten = async (req: Request, res: Response) => {
     if (otherDbCheck) shortId = nanoid();
     short.shortUrl = shortId;
     await short.save();
-    res.status(200).send({ link: short.shortUrl });
+    res.status(201).send({ link: short.shortUrl });
   } catch (err) {
     console.log(err);
     res.status(400).send({ message: "something went wrong" });
@@ -53,10 +53,33 @@ const customize = async (req: Request, res: Response) => {
       return res.status(404).send({ message: "url is taken, enter another" });
     const custom = new customUrl({ destination, customUrl });
     await custom.save();
-    res.status(200).send({ link: custom.customUrl });
+    res.status(201).send({ link: custom.customUrl });
   } catch (err) {
     console.log(err);
     res.status(400).send({ message: "something went wrong" });
   }
 };
-export { shorten, direct, customize };
+
+const editShort = async (req: Request, res: Response) => {
+  try {
+    //Check if the url is of the customizable type
+    const { value, newValue } = req.body;
+    const editable = await customUrl.findOne({ customUrl: value });
+    if (!editable)
+      return res.status(400).send({ message: "cannot edit that url" });
+    const exists = await customUrl.findOne({ customUrl: newValue });
+    if (exists) return res.status(400).send({ message: "url unavailable" });
+
+    const newCustomUrl = await customUrl.findOneAndUpdate(
+      { customUrl: newValue },
+      { customUrl: newValue },
+      { new: true }
+    );
+    if (newCustomUrl)
+      return res.status(200).send({ link: newCustomUrl?.customUrl });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send({ message: "something went wrong" });
+  }
+};
+export { shorten, direct, customize, editShort };
