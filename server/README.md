@@ -8,10 +8,4 @@ This is a simple URL shortener.
 
 # Documentation
 
-- This ReadMe will serve as some documentation of sorts.
-- Project contains 4 key endpoints
-  - POST /shorten -
-
-## Endpoints
-
--
+Here is a link to the Postman docs: https://documenter.getpostman.com/view/21313426/2s935msR2D
