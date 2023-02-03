@@ -9,3 +9,7 @@ This is a simple URL shortener.
 # Documentation
 
 Here is a link to the Postman docs: https://documenter.getpostman.com/view/21313426/2s935msR2D
+
+- N/B: The docs do not describe error message formats, incase of a bad request or server error, an error like: {
+  message: 'message about what went wrong'
+  } is thrown.
