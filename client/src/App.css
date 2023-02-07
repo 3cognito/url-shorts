@@ -1,0 +1,129 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  height: 100vh;
+  background-color: #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.loading{
+  filter: blur(1.5px);
+}
+
+.loading .loading-text{
+  z-index: 4;
+}
+
+button{
+  cursor: pointer;
+}
+
+.heading-text{
+  margin-block-end: 0.4rem;
+}
+
+.input-container{
+  display: flex;
+  column-gap: 0.6rem;
+  margin-block: 1rem;
+}
+
+.input-container input, .input-container button{
+  padding: 0.6rem 0.6rem;
+}
+
+.input-container input{
+  background-color: #fff;
+  border: none;
+  width: 14rem;
+  text-indent: 0.4rem;
+  border-radius: 3px;
+}
+.input-container input:focus-visible{
+  outline: none;
+}
+.input-container input::placeholder{
+  font-size: small;
+}
+
+.input-container button{
+  background-color: #333;
+  border: none;
+  color: #fff;
+  padding-inline: 0.4rem;
+  border-radius: 3px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.result-container{
+  opacity: 1;
+  border: 1px solid;
+  font-size: small;
+  padding: 0.2rem 0.4rem 0.22rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 1rem;
+  border-radius: 2px;
+}
+
+.result-container input, .result-container button{
+  background-color: inherit;
+  border: none;
+}
+
+.result-container input{
+  width: 12rem;
+}
+.result-container input:focus-visible{
+  outline: none;
+}
+
+.result-container input::placeholder, .result-container input{
+  font-size: 12px;
+}
+
+.result-container_buttons{
+  display: flex;
+}
+.result-container button{
+  opacity: 0;
+  border: 1px solid;
+  padding-inline: 0.2rem;
+  margin-inline: 0.2rem;
+  border-radius: 2px;
+}
+.result-container:hover button{
+  opacity: 1;
+}
+
+
+.copied, .loading-text{
+  position: absolute;
+  right: 50%;
+  top: 60%;
+  transform: translate(50%, 50%);
+  opacity: 1;
+  transition: ease-in-out 0.5s;
+}
+
+.hidden{
+  opacity: 0;
+}
+
+@media screen and (max-width: 32em){
+  .input-container input, .result-container input{
+    width: 10rem;
+  }
+
+  .copied, .loading-text{
+    top: 70%;
+  }
+}
