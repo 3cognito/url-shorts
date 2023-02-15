@@ -1,14 +1,17 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import axios from 'axios';
 import './App.css';
 
 function App() {
   const [input, setInput] = useState("");
+  const [result, setResult] = useState("");
+  const [custom, setCustom] = useState("");
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [disable, setDisable] = useState(true)
-  const [result, setResult] = useState("");
+  const [longmessage, setLongMessage] = useState("");
+  const [customMessage, setCustomMessage] = useState("");
 
   const fetchData = async () => {
     try {
@@ -21,14 +24,39 @@ function App() {
     }
   }
 
+  // Resetting values of error messages
+  useEffect(() => {
+    setTimeout(() => setLongMessage(""), "5000")
+  }, [longmessage]);
+
+  useEffect(() => {
+    setTimeout(() => setCustomMessage(""), "5000")
+  }, [customMessage]);
+
   const handleClick = () => {
-    setInput("")
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false)
-    }, "2000")
-    
-    fetchData();
+    if(input){
+      // Validating the long url input field value
+      if (
+        input.includes("http") ||
+        input.includes("www.") ||
+        input.includes("https") ||
+        input.includes("https://")
+      ) {
+        setInput("");
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+        }, "2500");
+
+        setLongMessage("");
+        fetchData();
+      } else setLongMessage("Input a valid url");
+      
+    } else if (input === ''){
+      setLongMessage('Field cannot stay empty');
+    } else if (input.includes('http') || input.includes('https') || input.includes('https://')){
+      setLongMessage('Input a valid url')
+    }
   }
 
   return (
@@ -36,21 +64,55 @@ function App() {
       <h1 className={loading ? "heading-text loading" : "heading-text"}>
         url-shorts
       </h1>
+      {/* Input container */}
+      {loading ? <p className="loading-text">shortening...</p> : null}
       <div className={loading ? "input-container loading" : "input-container"}>
-        <input
-          type="text"
-          placeholder="Paste your long link here"
-          value={input}
-          onChange={(e) => {
-            setInput(e.target.value);
-            console.log(input);
-          }}
-        />
+        <div className="inputs">
+          <div className={longmessage ? "long-url_input error" : "long-url_input"}>
+            <input
+              type="url"
+              placeholder="Paste your long link here"
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                if (
+                  e.target.value.includes("http") ||
+                  e.target.value.includes("www.")
+                ) {
+                  setLongMessage("");
+                } else {
+                  setLongMessage("Input a valid url");
+                }
+              }}
+            />
+            <br />
+            <small>{longmessage}</small>
+          </div>
+          <div className={customMessage ? "custom-url_input error" : "custom-url_input"}>
+            <input
+              type="text"
+              placeholder="Url title (optional)"
+              value={custom}
+              onChange={(e) => {
+                setCustom(e.target.value)
+                if(e.target.value.length < 7){
+                  setCustomMessage("URL title must be at least 7 characters long")
+                } else {
+                  setCustomMessage("")
+                }
+              }}
+            />
+            <br />
+            <small>{customMessage}</small>
+          </div>
+        </div>
 
         <button onClick={handleClick} type="submit">
           shorten
         </button>
       </div>
+
+      {/* Result container */}
       <div className={result ? "result-container" : "result-container hidden"}>
         <input
           type="text"
@@ -63,9 +125,6 @@ function App() {
         />
         {disable ? (
           <div className="result-container_buttons">
-            <button onClick={() => setDisable(false)} title="Edit">
-              🖊
-            </button>
             <CopyToClipboard text={result} onCopy={() => setCopied(true)}>
               <button
                 onClick={() => setTimeout(() => setCopied(false), "2000")}
@@ -76,16 +135,8 @@ function App() {
             </CopyToClipboard>
           </div>
         ) : undefined}
-        {!disable ? (
-          <div className="result-container_buttons">
-            <button onClick={() => setDisable(true)} title="Check">
-              ✔
-            </button>
-          </div>
-        ) : undefined}
+        <div className="copied">{copied ? <p>URL copied!</p> : null}</div>
       </div>
-      <div className="copied">{copied ? <p>URL copied!</p> : null}</div>
-      {loading ? <p className="loading-text">shortening...</p> : null}
     </div>
   );
 }

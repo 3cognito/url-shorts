@@ -4,6 +4,7 @@
 }
 
 .app {
+  position: relative;
   height: 100vh;
   background-color: #ccc;
   display: flex;
@@ -14,10 +15,10 @@
 }
 
 .loading{
-  filter: blur(1.5px);
+  filter: blur(2px);
 }
 
-.loading .loading-text{
+.loading-text{
   z-index: 4;
 }
 
@@ -31,23 +32,31 @@ button{
 
 .input-container{
   display: flex;
-  column-gap: 0.6rem;
+  gap: 1rem;
   margin-block: 1rem;
+  position: relative;
+}
+
+.inputs{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 0.4rem;
 }
 
 .input-container input, .input-container button{
-  padding: 0.6rem 0.6rem;
+  height: 2rem;
 }
 
 .input-container input{
   background-color: #fff;
   border: none;
-  width: 14rem;
+  width: 15rem;
   text-indent: 0.4rem;
   border-radius: 3px;
 }
-.input-container input:focus-visible{
-  outline: none;
+.input-container input:focus-visible, .input-container button:focus-visible, .result-container input:focus-visible{
+  outline: 2px solid #888;
 }
 .input-container input::placeholder{
   font-size: small;
@@ -62,7 +71,21 @@ button{
   font-family: 'Courier New', Courier, monospace;
 }
 
+/* Error message */
+.error input:focus-visible{
+  outline: 2px solid rgb(205, 58, 58);
+}
+
+.long-url_input small, .custom-url_input small{
+  padding: 0 0.2rem 0.4rem;
+  font-size: 0.64rem;
+  font-family: Arial, Helvetica, sans-serif;
+  color: red;
+}
+
+/* Result container */
 .result-container{
+  position: relative;
   opacity: 1;
   border: 1px solid;
   font-size: small;
@@ -81,9 +104,6 @@ button{
 
 .result-container input{
   width: 12rem;
-}
-.result-container input:focus-visible{
-  outline: none;
 }
 
 .result-container input::placeholder, .result-container input{
@@ -108,7 +128,20 @@ button{
 .copied, .loading-text{
   position: absolute;
   right: 50%;
-  top: 60%;
+  top: 70%;
+  transform: translate(50%, 50%);
+  opacity: 1;
+  transition: ease-in-out 0.5s;
+
+  padding-block-start: 1rem;
+}
+
+.loading-text{
+  position: absolute;
+  font-weight: 600;
+  font-size: 1.2rem;
+  right: 50%;
+  top: 45%;
   transform: translate(50%, 50%);
   opacity: 1;
   transition: ease-in-out 0.5s;
@@ -118,12 +151,15 @@ button{
   opacity: 0;
 }
 
-@media screen and (max-width: 32em){
-  .input-container input, .result-container input{
-    width: 10rem;
+@media screen and (max-width: 37.5em){
+  .input-container, .inputs{
+    flex-direction: column;
+  }
+  .inputs{
+    row-gap: 0.2rem;
   }
 
-  .copied, .loading-text{
-    top: 70%;
+  .loading-text{
+    top: 40%;
   }
 }
