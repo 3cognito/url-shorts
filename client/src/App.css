@@ -18,7 +18,7 @@
   filter: blur(2px);
 }
 
-.loading-text{
+.loading .loading-text{
   z-index: 4;
 }
 
@@ -60,6 +60,11 @@ button{
 }
 .input-container input::placeholder{
   font-size: small;
+}
+
+.input-container button:disabled{
+  background-color: #777;
+  cursor: not-allowed;
 }
 
 .input-container button{
@@ -125,7 +130,7 @@ button{
 }
 
 
-.copied, .loading-text{
+.copied{
   position: absolute;
   right: 50%;
   top: 70%;
@@ -138,6 +143,7 @@ button{
 
 .loading-text{
   position: absolute;
+  z-index: 20;
   font-weight: 600;
   font-size: 1.2rem;
   right: 50%;
