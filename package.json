@@ -1,0 +1,20 @@
+{
+  "name": "url-shorts",
+  "version": "1.0.0",
+  "description": "This is a simple URL shortener.",
+  "main": "./server/dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd ./server && node dist/index.js "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anontommy/url-shorts.git"
+  },
+  "author": "Tommy and Bobby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anontommy/url-shorts/issues"
+  },
+  "homepage": "https://github.com/anontommy/url-shorts#readme"
+}

@@ -11,7 +11,7 @@ const nanoid = customAlphabet(
 const shorten = async (req: Request, res: Response) => {
   try {
     const { destination } = req.body;
-    console.log({destination});
+    // console.log({ destination });
     const urlExists = await shortUrl.findOne({ destination });
     if (urlExists) return res.status(200).send({ link: urlExists.shortUrl });
     const short = new shortUrl({ destination });
